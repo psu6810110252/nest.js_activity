@@ -13,6 +13,7 @@ import { BookCategoryModule } from './book-category/book-category.module';
       database: 'bookstore_dev',
       entities: [], // เราจะเพิ่ม Entities ที่นี่ในภายหลัง
       synchronize: true, // สร้าง Table อัตโนมัติ (ใช้สำหรับ Dev เท่านั้น)
+      autoLoadEntities: true
     }),
     BookCategoryModule,
   ],
