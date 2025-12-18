@@ -56,7 +56,7 @@ export class BookCategoryService {
       throw new Error(`Category with ID ${id} not found`);
     }
 
-    await this.repo.remove(category);
+    await this.repo.delete(id);
     return { message: `Book category with ID ${id} deleted successfully` };
   }
 }
