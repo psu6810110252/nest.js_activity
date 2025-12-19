@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Book } from '../../book/entities/book.entity'; // 👈 อย่าลืม import Book
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -14,7 +15,7 @@ export class User {
   email: string;
 
   @Column()
-  password: string; // เราจะเก็บแบบ Hashed
+  password: string;
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
@@ -24,4 +25,9 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // 👇 ความสัมพันธ์ Many-to-Many กับ Book
+  @ManyToMany(() => Book, (book) => book.likedBy)
+  @JoinTable() // 👈 ใส่ JoinTable ที่ฝั่ง User (หรือฝั่ง Book ก็ได้ ฝั่งใดฝั่งหนึ่ง)
+  likedBooks: Book[];
 }

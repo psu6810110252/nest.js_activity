@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinTable, ManyToMany } from 'typeorm';
 import { BookCategory } from '../../book-category/entities/book-category.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Book {
@@ -18,4 +19,8 @@ export class Book {
 
   @Column()
   categoryId: string; // เก็บ ID ของหมวดหมู่
+  
+  @ManyToMany(() => User, (user) => user.likedBooks)
+  @JoinTable()
+likedBy: User[];
 }
