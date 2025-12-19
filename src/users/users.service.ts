@@ -13,6 +13,7 @@ export class UsersService implements OnModuleInit { // เพิ่ม implement
     private userRepository: Repository<User>,
   ) {}
 
+
   async onModuleInit() {
     const adminEmail = 'admin@bookstore.com';
     const admin = await this.findOneByEmail(adminEmail);
@@ -69,5 +70,7 @@ export class UsersService implements OnModuleInit { // เพิ่ม implement
   async remove(id: string) {
     return this.userRepository.delete(id);
   }
+  
+  
 
 }

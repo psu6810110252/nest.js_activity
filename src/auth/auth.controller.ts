@@ -12,7 +12,8 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() body: LoginDto) {
-    return this.authService.login(body.email, body.password); // Error เกิดขึ้นที่บรรทัดนี้
+  async login(@Body() body: any) {
+    return this.authService.login(body);
+    const user = await this.authService.validateUser(body.email, body.password);
 }
 }

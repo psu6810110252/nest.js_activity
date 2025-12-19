@@ -40,4 +40,12 @@ async findAll() {
     book.likeCount = (book.likeCount ?? 0) + 1;
     return await this.bookRepository.save(book);
   }
+
+  async remove(id: string) {
+    const book = await this.findOne(id);
+    if (!book) {
+      throw new NotFoundException(`Book with id ${id} not found`);
+    }
+    return await this.bookRepository.remove(book);
+  }
 }

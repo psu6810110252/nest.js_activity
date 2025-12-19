@@ -20,20 +20,20 @@ export class AuthService {
     return null;
   }
 
-  // สร้าง Token (Payload คือข้อมูลที่จะฝังใน Token)
- async login(email: string, pass: string) {
-  // 1. ค้นหา User จาก Email
-  const user = await this.usersService.findOneByEmail(email);
-  if (!user) throw new UnauthorizedException('ไม่พบผู้ใช้งานนี้');
-
-  // 2. เปรียบเทียบรหัสผ่านที่ส่งมา กับ Hash ใน Database
-  const isMatch = await bcrypt.compare(pass, user.password); //
-  if (!isMatch) throw new UnauthorizedException('รหัสผ่านไม่ถูกต้อง');
-
-  // 3. สร้าง Token (ตัวอย่าง)
-  const payload = { sub: user.id, username: user.email, role: user.role };
+  /* สร้าง Token (Payload คือข้อมูลที่จะฝังใน Token) */
+  async login(user: any) {
+  const payload = { 
+    email: user.email, 
+    sub: user.id, 
+    role: 'ADMIN' // กรณีทดสอบ ให้ตั้งค่า default เป็น 'USER'
+    //
+  };
+  
   return {
-    access_token: await this.jwtService.signAsync(payload),
+    access_token: this.jwtService.sign(payload),
   };
 }
+// src/auth/auth.service.ts */
+
+
 }
