@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from './entities/book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BookService {
@@ -48,4 +49,20 @@ async findAll() {
     }
     return await this.bookRepository.remove(book);
   }
-}
+
+  // ✅ เพิ่มใน src/book/book.service.ts
+
+async update(id: string, updateBookDto: UpdateBookDto) {
+    const book = await this.findOne(id); // เช็คว่ามีหนังสือไหม
+    if (!book) {
+      throw new NotFoundException(`Book with id ${id} not found`);
+    }
+    
+    // รวมข้อมูลเก่าและใหม่ แล้วบันทึก
+    // หมายเหตุ: ต้องตรวจสอบว่า TypeORM เวอร์ชั่นที่ใช้รองรับการ spread object แบบนี้หรือไม่ 
+    // ถ้าไม่ ให้ใช้ this.bookRepository.merge(book, updateBookDto) แทน
+    const updatedBook = this.bookRepository.merge(book, updateBookDto as any); 
+    return await this.bookRepository.save(updatedBook);
+  }
+} 
+  // src/book/book.service.ts ✅

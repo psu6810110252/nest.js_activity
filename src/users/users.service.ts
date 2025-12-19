@@ -28,6 +28,8 @@ export class UsersService implements OnModuleInit { // เพิ่ม implement
     }
   }
 
+  // src/users/users.service.ts
+
   async create(createUserDto: CreateUserDto) {
     const { password, role, ...userData } = createUserDto;
     
@@ -37,7 +39,8 @@ export class UsersService implements OnModuleInit { // เพิ่ม implement
     
     const user = this.userRepository.create({ 
       ...userData, 
-      password: hashedPassword 
+      password: hashedPassword,
+      role: (role as UserRole) // 👈👈 สำคัญมาก: ต้องใส่ Role กลับคืนเข้าไปด้วยครับ!
     });
     return this.userRepository.save(user);
   }

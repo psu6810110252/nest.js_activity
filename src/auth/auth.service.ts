@@ -25,7 +25,7 @@ export class AuthService {
   const payload = { 
     email: user.email, 
     sub: user.id, 
-    role: 'ADMIN' // กรณีทดสอบ ให้ตั้งค่า default เป็น 'USER'
+    role: user.role 
     //
   };
   
