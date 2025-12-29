@@ -1,40 +1,24 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BookCategoryModule } from './book-category/book-category.module';
-import { BookModule } from './book/book.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
-    // 1. Load ConfigModule globally
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'admin',      // ตรงกับ docker-compose
+      password: 'password123', // ตรงกับ docker-compose
+      database: 'shop_db',    // ตรงกับ docker-compose
+      autoLoadEntities: true,
+      synchronize: true,      // Dev mode: แก้โค้ดแล้ว DB อัปเดตตาม
     }),
-
-    // 2. Use async TypeOrm config so it can read from ConfigService
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule], // this module depends on ConfigModule
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST') || 'localhost',
-        port: configService.get<number>('DB_PORT') || 5432,
-        username: configService.get<string>('DB_USERNAME') || 'admin',
-        password: configService.get<string>('DB_PASSWORD') || 'password123',
-        database: configService.get<string>('DB_DATABASE') || 'bookstore_dev',
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
-      inject: [ConfigService],
-    }),
-
-    // Application modules
-    BookCategoryModule,
-    BookModule,
-    UsersModule,
-    AuthModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
